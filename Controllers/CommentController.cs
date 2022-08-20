@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Blog.Api.Context;
+using Blog.Api.Model;
 
 namespace Blog.Api.Controllers;
 
@@ -6,15 +8,26 @@ namespace Blog.Api.Controllers;
 [Route("api/[controller]")]
 public class CommentController : ControllerBase
 {
+    private readonly BlogApiContext _context;
+
+    public CommentController(BlogApiContext context) {
+        _context = context;
+    }
+
     [HttpPost]
-    public string CreateComment()
+    public string CreateComment([FromBody] Comment comment)
     {
-        return "ok";
+        _context.Comment?.Add(comment);
+        _context.SaveChanges();
+        return "Comentário criado.";
     }
 
     [HttpDelete("{id:int}")]
     public string DeleteComment(int id)
     {
-        return "ok";
+        var comment = _context.Comment?.FirstOrDefault(c => c.CommentId == id);
+        _context.Comment?.Remove(comment!);
+        _context.SaveChanges();
+        return "Comentário removido.";
     }
 }

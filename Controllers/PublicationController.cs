@@ -1,3 +1,5 @@
+using Blog.Api.Context;
+using Blog.Api.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
@@ -6,27 +8,39 @@ namespace Blog.Api.Controllers;
 [Route("api/[controller]")]
 public class PublicationController : ControllerBase
 {
+    private readonly BlogApiContext _context;
+
+    public PublicationController(BlogApiContext context) {
+        _context = context;
+    }
+
     [HttpPost]
-    public string CreatePublication()
+    public string CreatePublication([FromBody] Publication publication)
     {
-        return "ok";
+        _context.Publication?.Add(publication);
+        _context.SaveChanges();
+        return "Publicação criada.";
     }
 
     [HttpPut("{id:int}")]
-    public string EditPublication(int id)
+    public string EditPublication(int id, [FromBody] Publication publication)
     {
-        return "ok";
+        _context.Publication?.Update(publication);
+        _context.SaveChanges();
+        return "Publicação atualizada.";
     }
 
     [HttpDelete("{id:int}")]
     public string DeletePublication(int id)
     {
-        return "ok";
+        var publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
+        _context.Publication?.Remove(publication!);
+        return "Publicação removida.";
     }
 
     [HttpGet]
-    public string ListPublication()
+    public IEnumerable<Publication> ListPublication()
     {
-        return "ok";
+        return _context.Publication!.ToList();
     }
 }
