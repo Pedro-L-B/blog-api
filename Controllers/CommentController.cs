@@ -6,11 +6,13 @@ namespace Blog.Api.Controllers;
 [Route("api/[controller]")]
 public class CommentController : ControllerBase
 {
+    [HttpPost]
     public string CreateComment()
     {
         return "ok";
     }
 
+    [HttpDelete]
     public string DeleteComment()
     {
         return "ok";

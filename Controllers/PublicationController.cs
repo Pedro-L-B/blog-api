@@ -6,21 +6,25 @@ namespace Blog.Api.Controllers;
 [Route("api/[controller]")]
 public class PublicationController : ControllerBase
 {
+    [HttpPost]
     public string CreatePublication()
     {
         return "ok";
     }
 
+    [HttpPut]
     public string EditPublication()
     {
         return "ok";
     }
 
+    [HttpDelete]
     public string DeletePublication()
     {
         return "ok";
     }
 
+    [HttpGet]
     public string ListPublication()
     {
         return "ok";
