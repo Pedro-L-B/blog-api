@@ -1,5 +1,6 @@
 using Blog.Api.Context;
 using Blog.Api.Model;
+using Blog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers;
@@ -8,39 +9,35 @@ namespace Blog.Api.Controllers;
 [Route("api/[controller]")]
 public class PublicationController : ControllerBase
 {
-    private readonly BlogApiContext _context;
+    private readonly PublicationService _publicationService;
 
-    public PublicationController(BlogApiContext context) {
-        _context = context;
+    public PublicationController(BlogApiContext context)
+    {
+        _publicationService = new PublicationService(context);
     }
 
     [HttpPost]
     public string CreatePublication([FromBody] Publication publication)
     {
-        _context.Publication?.Add(publication);
-        _context.SaveChanges();
-        return "Publicação criada.";
+        return _publicationService.CreatePublication(publication);
     }
 
     [HttpPut("{id:int}")]
     public string EditPublication(int id, [FromBody] Publication publication)
     {
-        _context.Publication?.Update(publication);
-        _context.SaveChanges();
-        return "Publicação atualizada.";
+        if (id != publication.PublicationId) return "Id não confere";
+        return _publicationService.EditPublication(id, publication);
     }
 
     [HttpDelete("{id:int}")]
     public string DeletePublication(int id)
     {
-        var publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
-        _context.Publication?.Remove(publication!);
-        return "Publicação removida.";
+        return _publicationService.DeletePublication(id);
     }
 
     [HttpGet]
     public IEnumerable<Publication> ListPublication()
     {
-        return _context.Publication!.ToList();
+        return _publicationService.ListPublication();
     }
 }
