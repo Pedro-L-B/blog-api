@@ -12,14 +12,14 @@ public class PublicationController : ControllerBase
         return "ok";
     }
 
-    [HttpPut]
-    public string EditPublication()
+    [HttpPut("{id:int}")]
+    public string EditPublication(int id)
     {
         return "ok";
     }
 
-    [HttpDelete]
-    public string DeletePublication()
+    [HttpDelete("{id:int}")]
+    public string DeletePublication(int id)
     {
         return "ok";
     }

@@ -12,8 +12,8 @@ public class CommentController : ControllerBase
         return "ok";
     }
 
-    [HttpDelete]
-    public string DeleteComment()
+    [HttpDelete("{id:int}")]
+    public string DeleteComment(int id)
     {
         return "ok";
     }
