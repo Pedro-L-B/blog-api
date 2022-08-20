@@ -20,7 +20,7 @@ public class CommentService
 
     public string DeleteComment(int id)
     {
-        var comment = _context.Comment?.FirstOrDefault(c => c.CommentId == id);
+        Comment? comment = _context.Comment?.FirstOrDefault(c => c.CommentId == id);
         _context.Comment?.Remove(comment!);
         _context.SaveChanges();
         return "Comentário removido.";

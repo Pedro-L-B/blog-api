@@ -27,7 +27,7 @@ public class PublicationService
 
     public string DeletePublication(int id)
     {
-        var publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
+        Publication? publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
         _context.Publication?.Remove(publication!);
         _context.SaveChanges();
         return "Publicação removida.";
@@ -36,5 +36,11 @@ public class PublicationService
     public IEnumerable<Publication> ListPublication()
     {
         return _context.Publication!.ToList();
+    }
+
+    public Publication DetailPublication(int id)
+    {
+        Publication? publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
+        return publication!;
     }
 }

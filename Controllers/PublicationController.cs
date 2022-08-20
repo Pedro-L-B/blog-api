@@ -40,4 +40,10 @@ public class PublicationController : ControllerBase
     {
         return _publicationService.ListPublication();
     }
+
+    [HttpGet("{id:int}")]
+    public Publication DetailPublication(int id)
+    {
+        return _publicationService.DetailPublication(id);
+    }
 }
