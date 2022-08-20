@@ -3,6 +3,7 @@ namespace Blog.Api.Repository.Implementation;
 using System.Collections.Generic;
 using Blog.Api.Context;
 using Blog.Api.Model;
+using Microsoft.EntityFrameworkCore;
 
 public class PublicationRepository : BaseRepository, IPublicationRepository
 {
@@ -14,7 +15,9 @@ public class PublicationRepository : BaseRepository, IPublicationRepository
 
     public Publication GetById(int id)
     {
-        return _context.Publication?.FirstOrDefault(p => p.PublicationId == id)!;
+        return _context.Publication?
+            .Include(p => p.Comments)
+            .FirstOrDefault(p => p.PublicationId == id)!;
     }
 
     public IEnumerable<Publication> List()

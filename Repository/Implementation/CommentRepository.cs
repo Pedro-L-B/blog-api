@@ -1,5 +1,6 @@
 using Blog.Api.Context;
 using Blog.Api.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Repository.Implementation;
 
