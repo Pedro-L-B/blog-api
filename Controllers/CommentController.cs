@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Blog.Api.Context;
 using Blog.Api.Model;
 using Blog.Api.Services;
+using Blog.Api.Repository;
 
 namespace Blog.Api.Controllers;
 
@@ -11,9 +11,9 @@ public class CommentController : ControllerBase
 {
     private readonly CommentService _commentService;
 
-    public CommentController(BlogApiContext context)
+    public CommentController(ICommentRepository commentRepository)
     {
-        _commentService = new CommentService(context);
+        _commentService = new CommentService(commentRepository);
     }
 
     [HttpPost]

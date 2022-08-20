@@ -1,28 +1,27 @@
-using Blog.Api.Context;
 using Blog.Api.Model;
+using Blog.Api.Repository;
 
 namespace Blog.Api.Services;
 
 public class CommentService
 {
-    private readonly BlogApiContext _context;
-    public CommentService(BlogApiContext context)
+    private readonly ICommentRepository _commentRepository;
+    public CommentService(ICommentRepository commentRepository)
     {
-        _context = context;
+        _commentRepository = commentRepository;
     }
 
     public string CreateComment(Comment comment)
     {
-        _context.Comment?.Add(comment);
-        _context.SaveChanges();
+        _commentRepository.Add(comment);
         return "Comentário criado.";
     }
 
     public string DeleteComment(int id)
     {
-        Comment? comment = _context.Comment?.FirstOrDefault(c => c.CommentId == id);
-        _context.Comment?.Remove(comment!);
-        _context.SaveChanges();
+        var comment = _commentRepository.GetById(id);
+        if (comment == null) return "Não existe comentário com esse Id.";
+        _commentRepository.Delete(comment);
         return "Comentário removido.";
     }
 

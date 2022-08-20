@@ -1,5 +1,5 @@
-using Blog.Api.Context;
 using Blog.Api.Model;
+using Blog.Api.Repository;
 using Blog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +11,9 @@ public class PublicationController : ControllerBase
 {
     private readonly PublicationService _publicationService;
 
-    public PublicationController(BlogApiContext context)
+    public PublicationController(IPublicationRepository publicationRepository)
     {
-        _publicationService = new PublicationService(context);
+        _publicationService = new PublicationService(publicationRepository);
     }
 
     [HttpPost]

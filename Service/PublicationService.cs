@@ -1,46 +1,44 @@
-using Blog.Api.Context;
 using Blog.Api.Model;
+using Blog.Api.Repository;
 
 namespace Blog.Api.Services;
 
 public class PublicationService
 {
-    private readonly BlogApiContext _context;
-    public PublicationService(BlogApiContext context)
+    private readonly IPublicationRepository _publicationRepository;
+    public PublicationService(IPublicationRepository publicationRepository)
     {
-        _context = context;
+        _publicationRepository = publicationRepository;
     }
 
     public string CreatePublication(Publication publication)
     {
-        _context.Publication?.Add(publication);
-        _context.SaveChanges();
+        _publicationRepository.Add(publication);
         return "Publicação criada.";
     }
 
     public string EditPublication(int id, Publication publication)
     {
-        _context.Publication?.Update(publication);
-        _context.SaveChanges();
+        _publicationRepository.Update(publication);
         return "Publicação atualizada.";
     }
 
     public string DeletePublication(int id)
     {
-        Publication? publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
-        _context.Publication?.Remove(publication!);
-        _context.SaveChanges();
+        var publication = _publicationRepository.GetById(id);
+        if (publication == null) return "Não existe publicação com esse Id.";
+        _publicationRepository.Delete(publication);
         return "Publicação removida.";
     }
 
     public IEnumerable<Publication> ListPublication()
     {
-        return _context.Publication!.ToList();
+        return _publicationRepository.List();
     }
 
     public Publication DetailPublication(int id)
     {
-        Publication? publication = _context.Publication?.FirstOrDefault(p => p.PublicationId == id);
-        return publication!;
+        var publication = _publicationRepository.GetById(id);
+        return publication;
     }
 }
