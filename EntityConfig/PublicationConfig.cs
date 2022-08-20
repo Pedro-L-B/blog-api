@@ -25,10 +25,14 @@ public class PublicationConfig : IEntityTypeConfiguration<Publication>
         builder.Property(p => p.Message)
             .IsRequired()
             .HasColumnName("message")
-            .HasColumnType("varchar(400)");
+            .HasColumnType("varchar(500)");
 
         builder.Property(p => p.RegistrationDate)
             .IsRequired()
             .HasColumnName("registrationDate");
+
+        builder.Property(p => p.CommentLimit)
+            .IsRequired()
+            .HasColumnName("commentLimit");
     }
 }

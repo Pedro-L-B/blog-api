@@ -10,20 +10,24 @@ public class CommentConfig : IEntityTypeConfiguration<Comment>
     {
         builder.ToTable("tb_comment");
 
-        builder.HasKey(p => p.CommentId)
+        builder.HasKey(c => c.CommentId)
             .HasName("PK_comment");
 
-        builder.Property(p => p.CommentId)
+        builder.Property(c => c.CommentId)
             .IsRequired()
             .HasColumnName("id");
 
-        builder.Property(p => p.Message)
+        builder.Property(c => c.Message)
             .IsRequired()
             .HasColumnName("message")
             .HasColumnType("varchar(300)");
 
-        builder.Property(p => p.RegistrationDate)
+        builder.Property(c => c.RegistrationDate)
             .IsRequired()
             .HasColumnName("registrationDate");
+
+        builder.HasOne(p => p.Publication)
+            .WithMany(c => c.Comments)
+            .HasForeignKey(c => c.PublicationId);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Blog.Api.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace blog_api.Migrations
 {
     [DbContext(typeof(BlogApiContext))]
-    partial class BlogApiContextModelSnapshot : ModelSnapshot
+    [Migration("20220820223507_UpdatingDatabase")]
+    partial class UpdatingDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
