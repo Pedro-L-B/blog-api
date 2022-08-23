@@ -1,3 +1,5 @@
+using AutoMapper;
+using Blog.Api.Dto;
 using Blog.Api.Model;
 using Blog.Api.Repository;
 using Blog.Api.Services;
@@ -11,22 +13,22 @@ public class PublicationController : ControllerBase
 {
     private readonly PublicationService _publicationService;
 
-    public PublicationController(IPublicationRepository publicationRepository)
+    public PublicationController(IPublicationRepository publicationRepository, IMapper mapper)
     {
-        _publicationService = new PublicationService(publicationRepository);
+        _publicationService = new PublicationService(publicationRepository, mapper);
     }
 
     [HttpPost]
-    public string CreatePublication([FromBody] Publication publication)
+    public string CreatePublication([FromBody] CreatePublicationDto createPublicationDto)
     {
-        return _publicationService.CreatePublication(publication);
+        return _publicationService.CreatePublication(createPublicationDto);
     }
 
-    [HttpPut("{id:int}")]
-    public string EditPublication(int id, [FromBody] Publication publication)
+    [HttpPut]
+    public string EditPublication(int id, [FromBody] EditPublicationDto editPublicationDto)
     {
-        if (id != publication.PublicationId) return "Id não confere";
-        return _publicationService.EditPublication(id, publication);
+        if (id != editPublicationDto.PublicationId) return "Id não confere";
+        return _publicationService.EditPublication(id, editPublicationDto);
     }
 
     [HttpDelete("{id:int}")]
@@ -36,13 +38,13 @@ public class PublicationController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<Publication> ListPublication()
+    public IEnumerable<ListPublicationDto> ListPublication()
     {
         return _publicationService.ListPublication();
     }
 
     [HttpGet("{id:int}")]
-    public Publication DetailPublication(int id)
+    public DetailPublicationDto DetailPublication(int id)
     {
         return _publicationService.DetailPublication(id);
     }

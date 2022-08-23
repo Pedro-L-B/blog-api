@@ -5,6 +5,7 @@ public class Publication
     public Publication()
     {
         Comments = new List<Comment>();
+        RegistrationDate = DateTime.Now;
     }
 
     public int PublicationId { get; set; }
