@@ -1,5 +1,6 @@
 using AutoMapper;
 using Blog.Api.Dto;
+using Blog.Api.Enums;
 using Blog.Api.Exceptions;
 using Blog.Api.Model;
 using Blog.Api.Repository;
@@ -38,7 +39,7 @@ public class PublicationService
 
         var titleExceptionCheck = _publicationRepository.GetByTitle(editPublicationDto.Title!);
         if (titleExceptionCheck != null)
-            throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma publicação com mesmo título.");
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma outra publicação com mesmo título.");
 
         var publication = _mapper.Map<Publication>(editPublicationDto);
         _publicationRepository.Update(publication);
@@ -55,9 +56,15 @@ public class PublicationService
         return "Publicação removida.";
     }
 
-    public IEnumerable<ListPublicationDto> ListPublication()
+    public IEnumerable<ListPublicationDto> ListPublication(
+        int pageNumber = 1,
+        int pageSize = 5,
+        string? search = "",
+        OrderByPublicationColumnEnum orderByCollumn = OrderByPublicationColumnEnum.PublicationId,
+        OrderByTypeEnum orderByType = OrderByTypeEnum.ASC
+    )
     {
-        var result = _publicationRepository.List();
+        var result = _publicationRepository.List(pageNumber, pageSize, search!, orderByCollumn, orderByType);
         return _mapper.Map<IEnumerable<ListPublicationDto>>(result);
     }
 

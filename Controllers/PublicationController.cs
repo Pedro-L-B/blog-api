@@ -1,10 +1,10 @@
 using AutoMapper;
 using Blog.Api.Dto;
 using Blog.Api.Exceptions;
-using Blog.Api.Model;
 using Blog.Api.Repository;
 using Blog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Blog.Api.Enums;
 
 namespace Blog.Api.Controllers;
 
@@ -72,9 +72,15 @@ public class PublicationController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<ListPublicationDto> ListPublication()
+    public IEnumerable<ListPublicationDto> ListPublication(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 5,
+        [FromQuery] string? search = "",
+        [FromQuery] OrderByPublicationColumnEnum orderByCollumn = OrderByPublicationColumnEnum.PublicationId,
+        [FromQuery] OrderByTypeEnum orderByType = OrderByTypeEnum.ASC
+    )
     {
-        return _publicationService.ListPublication();
+        return _publicationService.ListPublication(pageNumber, pageSize, search, orderByCollumn, orderByType);
     }
 
     [HttpGet("{id:int}")]
