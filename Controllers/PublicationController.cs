@@ -72,7 +72,7 @@ public class PublicationController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<ListPublicationDto> ListPublication(
+    public dynamic ListPublication(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 5,
         [FromQuery] string? search = "",
@@ -80,7 +80,18 @@ public class PublicationController : ControllerBase
         [FromQuery] OrderByTypeEnum orderByType = OrderByTypeEnum.ASC
     )
     {
-        return _publicationService.ListPublication(pageNumber, pageSize, search, orderByCollumn, orderByType);
+        try
+        {
+            return _publicationService.ListPublication(pageNumber, pageSize, search, orderByCollumn, orderByType);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, "Os campos de paginamento devem conter apenas números inteiros e positivos.");
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
+        }
     }
 
     [HttpGet("{id:int}")]

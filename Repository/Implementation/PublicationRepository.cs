@@ -22,7 +22,7 @@ public class PublicationRepository : BaseRepository, IPublicationRepository
             .FirstOrDefault(p => p.PublicationId == id)!;
     }
 
-    public IEnumerable<Publication> List(
+    public IPagedList<Publication> List(
         int pageNumber,
         int pageSize,
         string? search,

@@ -1,12 +1,13 @@
 using Blog.Api.Enums;
 using Blog.Api.Model;
+using X.PagedList;
 
 namespace Blog.Api.Repository;
 
 public interface IPublicationRepository : IBaseRepository
 {
     Publication GetById(int id);
-    IEnumerable<Publication> List(
+    IPagedList<Publication> List(
         int pageNumber,
         int pageSize,
         string search,

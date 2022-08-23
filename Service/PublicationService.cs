@@ -1,3 +1,4 @@
+using System.Dynamic;
 using AutoMapper;
 using Blog.Api.Dto;
 using Blog.Api.Enums;
@@ -56,7 +57,7 @@ public class PublicationService
         return "Publicação removida.";
     }
 
-    public IEnumerable<ListPublicationDto> ListPublication(
+    public dynamic ListPublication(
         int pageNumber = 1,
         int pageSize = 5,
         string? search = "",
@@ -64,8 +65,19 @@ public class PublicationService
         OrderByTypeEnum orderByType = OrderByTypeEnum.ASC
     )
     {
-        var result = _publicationRepository.List(pageNumber, pageSize, search!, orderByCollumn, orderByType);
-        return _mapper.Map<IEnumerable<ListPublicationDto>>(result);
+        var listPublication = _publicationRepository.List(pageNumber, pageSize, search!, orderByCollumn, orderByType);
+
+        dynamic result = new ExpandoObject();
+        result.pageNumber = pageNumber;
+        result.pageSize = pageSize;
+        result.totalPages = Math.Ceiling((double)listPublication.TotalItemCount / pageSize);
+        result.totalItems = listPublication.TotalItemCount;
+        result.search = search;
+        result.orderByCollumn = orderByCollumn;
+        result.orderByType = orderByType;
+        result.data = _mapper.Map<List<ListPublicationDto>>(listPublication);
+
+        return result;
     }
 
     public DetailPublicationDto DetailPublication(int id)
