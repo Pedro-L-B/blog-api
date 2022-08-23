@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using Blog.Api.Model;
 using Blog.Api.Services;
 using Blog.Api.Repository;
 using Blog.Api.Dto;
 using AutoMapper;
+using Blog.Api.Exceptions;
 
 namespace Blog.Api.Controllers;
 
@@ -19,14 +19,36 @@ public class CommentController : ControllerBase
     }
 
     [HttpPost]
-    public string CreateComment([FromBody] CreateCommentDto comment)
+    public ActionResult<string> CreateComment([FromBody] CreateCommentDto comment)
     {
-        return _commentService.CreateComment(comment);
+        try
+        {
+            return _commentService.CreateComment(comment);
+        }
+        catch (ErrorException errorException)
+        {
+            return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantacte o suporte.");
+        }
     }
 
     [HttpDelete("{id:int}")]
-    public string DeleteComment(int id)
+    public ActionResult<string> DeleteComment(int id)
     {
-        return _commentService.DeleteComment(id);
+        try
+        {
+            return _commentService.DeleteComment(id);
+        }
+        catch (ErrorException errorException)
+        {
+            return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantacte o suporte.");
+        }
     }
 }

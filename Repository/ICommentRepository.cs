@@ -5,4 +5,5 @@ namespace Blog.Api.Repository;
 public interface ICommentRepository : IBaseRepository
 {
     Comment GetById(int id);
+    IEnumerable<Comment> List();
 }

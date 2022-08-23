@@ -1,6 +1,5 @@
 using Blog.Api.Context;
 using Blog.Api.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Repository.Implementation;
 
@@ -14,6 +13,11 @@ public class CommentRepository : BaseRepository, ICommentRepository
 
     public Comment GetById(int id)
     {
-        return _context.Comment?.FirstOrDefault(p => p.CommentId == id)!;
+        return _context.Comment?.FirstOrDefault(c => c.CommentId == id)!;
+    }
+
+    public IEnumerable<Comment> List()
+    {
+        return _context.Comment?.ToList()!;
     }
 }

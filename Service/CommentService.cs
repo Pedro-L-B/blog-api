@@ -1,5 +1,6 @@
 using AutoMapper;
 using Blog.Api.Dto;
+using Blog.Api.Exceptions;
 using Blog.Api.Model;
 using Blog.Api.Repository;
 
@@ -17,7 +18,9 @@ public class CommentService
 
     public string CreateComment(CreateCommentDto createCommentDto)
     {
-        Comment comment = _mapper.Map<Comment>(createCommentDto);
+        var result = _commentRepository.List().FirstOrDefault(c => c.Message == createCommentDto.Message);
+        if (result != null) throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe um comentário com a mesma mensagem.");
+        var comment = _mapper.Map<Comment>(createCommentDto);
         _commentRepository.Add(comment);
         return "Comentário criado.";
     }
@@ -25,7 +28,7 @@ public class CommentService
     public string DeleteComment(int id)
     {
         var comment = _commentRepository.GetById(id);
-        if (comment == null) return "Não existe comentário com esse Id.";
+        if (comment == null) throw new ErrorException (StatusCodes.Status400BadRequest, "Não existe comentário com esse Id.");
         _commentRepository.Delete(comment);
         return "Comentário removido.";
     }

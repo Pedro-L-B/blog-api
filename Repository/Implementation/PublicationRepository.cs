@@ -1,9 +1,8 @@
-namespace Blog.Api.Repository.Implementation;
-
-using System.Collections.Generic;
 using Blog.Api.Context;
 using Blog.Api.Model;
 using Microsoft.EntityFrameworkCore;
+
+namespace Blog.Api.Repository.Implementation;
 
 public class PublicationRepository : BaseRepository, IPublicationRepository
 {
