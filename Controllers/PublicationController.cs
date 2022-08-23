@@ -1,5 +1,6 @@
 using AutoMapper;
 using Blog.Api.Dto;
+using Blog.Api.Exceptions;
 using Blog.Api.Model;
 using Blog.Api.Repository;
 using Blog.Api.Services;
@@ -19,22 +20,55 @@ public class PublicationController : ControllerBase
     }
 
     [HttpPost]
-    public string CreatePublication([FromBody] CreatePublicationDto createPublicationDto)
+    public ActionResult<string> CreatePublication([FromBody] CreatePublicationDto createPublicationDto)
     {
-        return _publicationService.CreatePublication(createPublicationDto);
+        try
+        {
+            return _publicationService.CreatePublication(createPublicationDto);
+        }
+        catch (ErrorException errorException)
+        {
+            return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
+        }
     }
 
     [HttpPut]
-    public string EditPublication(int id, [FromBody] EditPublicationDto editPublicationDto)
+    public ActionResult<string> EditPublication(int id, [FromBody] EditPublicationDto editPublicationDto)
     {
-        if (id != editPublicationDto.PublicationId) return "Id não confere";
-        return _publicationService.EditPublication(id, editPublicationDto);
+        try
+        {
+            if (id != editPublicationDto.PublicationId) return "Id não confere";
+            return _publicationService.EditPublication(id, editPublicationDto);
+        }
+        catch (ErrorException errorException)
+        {
+            return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
+        }
     }
 
     [HttpDelete("{id:int}")]
-    public string DeletePublication(int id)
+    public ActionResult<string> DeletePublication(int id)
     {
-        return _publicationService.DeletePublication(id);
+        try
+        {
+            return _publicationService.DeletePublication(id);
+        }
+        catch (ErrorException errorException)
+        {
+            return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
+        }
     }
 
     [HttpGet]
@@ -44,8 +78,19 @@ public class PublicationController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public DetailPublicationDto DetailPublication(int id)
+    public ActionResult<DetailPublicationDto> DetailPublication(int id)
     {
-        return _publicationService.DetailPublication(id);
+        try
+        {
+            return _publicationService.DetailPublication(id);
+        }
+        catch (ErrorException errorException)
+        {
+            return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (Exception)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
+        }
     }
 }

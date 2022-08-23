@@ -6,4 +6,5 @@ public interface IPublicationRepository : IBaseRepository
 {
     Publication GetById(int id);
     IEnumerable<Publication> List();
+    Publication GetByTitle(string title);
 }

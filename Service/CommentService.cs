@@ -18,8 +18,17 @@ public class CommentService
 
     public string CreateComment(CreateCommentDto createCommentDto)
     {
-        var result = _commentRepository.List().FirstOrDefault(c => c.Message == createCommentDto.Message);
-        if (result != null) throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe um comentário com a mesma mensagem.");
+        var publication = _commentRepository.GetPublication(createCommentDto.PublicationId);
+        if (publication == default)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
+
+        var messageCheck = _commentRepository.GetByMessage(createCommentDto.Message!);
+        if (messageCheck != null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe um outro comentário com a mesma mensagem.");
+
+        var commentCountCheck = publication.Comments.Count();
+        if (publication.CommentLimit <= commentCountCheck)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Essa publicação já atingiu a quantidade máxima de comentários.");
         var comment = _mapper.Map<Comment>(createCommentDto);
         _commentRepository.Add(comment);
         return "Comentário criado.";
@@ -32,5 +41,4 @@ public class CommentService
         _commentRepository.Delete(comment);
         return "Comentário removido.";
     }
-
 }

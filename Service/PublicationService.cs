@@ -1,5 +1,6 @@
 using AutoMapper;
 using Blog.Api.Dto;
+using Blog.Api.Exceptions;
 using Blog.Api.Model;
 using Blog.Api.Repository;
 
@@ -17,6 +18,10 @@ public class PublicationService
 
     public string CreatePublication(CreatePublicationDto createPublicationDto)
     {
+        var titleExceptionCheck = _publicationRepository.GetByTitle(createPublicationDto.Title!);
+        if (titleExceptionCheck != null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma publicação com mesmo título.");
+
         var publication = _mapper.Map<Publication>(createPublicationDto);
         _publicationRepository.Add(publication);
         return "Publicação criada.";
@@ -24,6 +29,17 @@ public class PublicationService
 
     public string EditPublication(int id, EditPublicationDto editPublicationDto)
     {
+        if (id != editPublicationDto.PublicationId)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Os Ids não conferem.");
+
+        var idExceptionCheck = _publicationRepository.GetById(editPublicationDto.PublicationId);
+        if (idExceptionCheck == null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
+
+        var titleExceptionCheck = _publicationRepository.GetByTitle(editPublicationDto.Title!);
+        if (titleExceptionCheck != null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma publicação com mesmo título.");
+
         var publication = _mapper.Map<Publication>(editPublicationDto);
         _publicationRepository.Update(publication);
         return "Publicação atualizada.";
@@ -32,7 +48,9 @@ public class PublicationService
     public string DeletePublication(int id)
     {
         var publication = _publicationRepository.GetById(id);
-        if (publication == null) return "Não existe publicação com esse Id.";
+        if (publication == null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
+
         _publicationRepository.Delete(publication);
         return "Publicação removida.";
     }
@@ -46,6 +64,9 @@ public class PublicationService
     public DetailPublicationDto DetailPublication(int id)
     {
         var publication = _publicationRepository.GetById(id);
+        if (publication == null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
+
         return _mapper.Map<DetailPublicationDto>(publication);
     }
 }

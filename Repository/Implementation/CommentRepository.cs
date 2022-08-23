@@ -20,4 +20,18 @@ public class CommentRepository : BaseRepository, ICommentRepository
     {
         return _context.Comment?.ToList()!;
     }
+
+    public Comment GetByMessage(string message)
+    {
+        return _context.Comment?
+            .ToList()
+            .FirstOrDefault(c => c.Message == message)!;
+    }
+
+    public Publication GetPublication (int publicationId)
+    {
+        return _context.Publication?
+            .ToList()!
+            .FirstOrDefault(p => p.PublicationId == publicationId)!;
+    }
 }

@@ -4,6 +4,8 @@ using Blog.Api.Repository;
 using Blog.Api.Dto;
 using AutoMapper;
 using Blog.Api.Exceptions;
+using Blog.Api.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Controllers;
 
@@ -31,7 +33,7 @@ public class CommentController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantacte o suporte.");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
         }
     }
 
@@ -48,7 +50,7 @@ public class CommentController : ControllerBase
         }
         catch (Exception)
         {
-            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantacte o suporte.");
+            return StatusCode(StatusCodes.Status500InternalServerError, "Tivemos um problema. Por favor, cantate o suporte.");
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Blog.Api.Dto;
 public class CreateCommentDto
 {
     [Required(ErrorMessage = "É necessário inserir a mensagem.")]
+    [MaxLength(length: 300, ErrorMessage = "A mensagem deve ter no máximo 300 caracteres.")]
     public string? Message { get; set; }
 
     [Required(ErrorMessage = "É necessário inserir o Id da publicação.")]

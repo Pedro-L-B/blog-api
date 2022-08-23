@@ -23,4 +23,9 @@ public class PublicationRepository : BaseRepository, IPublicationRepository
     {
         return _context.Publication?.ToList()!;
     }
+
+    public Publication GetByTitle(string title)
+    {
+        return _context.Publication?.FirstOrDefault(p => p.Title == title)!;
+    }
 }
