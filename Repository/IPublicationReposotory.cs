@@ -6,12 +6,12 @@ namespace Blog.Api.Repository;
 
 public interface IPublicationRepository : IBaseRepository
 {
-    Publication GetById(int id);
-    IPagedList<Publication> List(
+    Task<Publication> GetById(int id);
+    Task<IPagedList<Publication>> List(
         int pageNumber,
         int pageSize,
         string search,
         OrderByPublicationColumnEnum orderByCollumn,
         OrderByTypeEnum orderByType);
-    Publication GetByTitle(string title);
+    Task<Publication> GetByTitle(string title);
 }

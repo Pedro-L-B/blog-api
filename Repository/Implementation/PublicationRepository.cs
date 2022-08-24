@@ -15,28 +15,30 @@ public class PublicationRepository : BaseRepository, IPublicationRepository
         _context = context;
     }
 
-    public Publication GetById(int id)
+    public async Task<Publication> GetById(int id)
     {
-        return _context.Publication?
+        var result = await _context.Publication?
             .Include(p => p.Comments)
-            .FirstOrDefault(p => p.PublicationId == id)!;
+            .FirstOrDefaultAsync(p => p.PublicationId == id)!;
+        return result!;
     }
 
-    public IPagedList<Publication> List(
+    public async Task<IPagedList<Publication>> List(
         int pageNumber,
         int pageSize,
         string? search,
         OrderByPublicationColumnEnum orderByCollumn,
         OrderByTypeEnum orderByType)
     {
-        return _context.Publication?
+        return await _context.Publication?
             .OrderBy($"{orderByCollumn.ToString()} {orderByType.ToString()}")
             .Where(p => p.Title!.Contains(search!))
-            .ToPagedList(pageNumber,pageSize)!;
+            .ToPagedListAsync(pageNumber,pageSize)!;
     }
 
-    public Publication GetByTitle(string title)
+    public async Task<Publication> GetByTitle(string title)
     {
-        return _context.Publication?.FirstOrDefault(p => p.Title == title)!;
+        var result = await _context.Publication?.FirstOrDefaultAsync(p => p.Title == title)!;
+        return result!;
     }
 }

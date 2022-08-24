@@ -18,46 +18,43 @@ public class PublicationService
         _mapper = mapper;
     }
 
-    public string CreatePublication(CreatePublicationDto createPublicationDto)
+    public async Task CreatePublication(CreatePublicationDto createPublicationDto)
     {
-        var titleExceptionCheck = _publicationRepository.GetByTitle(createPublicationDto.Title!);
+        var titleExceptionCheck = await _publicationRepository.GetByTitle(createPublicationDto.Title!);
         if (titleExceptionCheck != null)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma publicação com mesmo título.");
 
         var publication = _mapper.Map<Publication>(createPublicationDto);
         _publicationRepository.Add(publication);
-        return "Publicação criada.";
     }
 
-    public string EditPublication(int id, EditPublicationDto editPublicationDto)
+    public async Task EditPublication(int id, EditPublicationDto editPublicationDto)
     {
         if (id != editPublicationDto.PublicationId)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Os Ids não conferem.");
 
-        var idExceptionCheck = _publicationRepository.GetById(editPublicationDto.PublicationId);
+        var idExceptionCheck = await _publicationRepository.GetById(editPublicationDto.PublicationId);
         if (idExceptionCheck == null)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
 
-        var titleExceptionCheck = _publicationRepository.GetByTitle(editPublicationDto.Title!);
+        var titleExceptionCheck = await _publicationRepository.GetByTitle(editPublicationDto.Title!);
         if (titleExceptionCheck != null)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma outra publicação com mesmo título.");
 
         var publication = _mapper.Map<Publication>(editPublicationDto);
         _publicationRepository.Update(publication);
-        return "Publicação atualizada.";
     }
 
-    public string DeletePublication(int id)
+    public async Task DeletePublication(int id)
     {
-        var publication = _publicationRepository.GetById(id);
+        var publication = await _publicationRepository.GetById(id);
         if (publication == null)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
 
         _publicationRepository.Delete(publication);
-        return "Publicação removida.";
     }
 
-    public dynamic ListPublication(
+    public async Task<dynamic> ListPublication(
         int pageNumber = 1,
         int pageSize = 3,
         string? search = "",
@@ -65,7 +62,7 @@ public class PublicationService
         OrderByTypeEnum orderByType = OrderByTypeEnum.ASC
     )
     {
-        var listPublication = _publicationRepository.List(pageNumber, pageSize, search!, orderByCollumn, orderByType);
+        var listPublication = await _publicationRepository.List(pageNumber, pageSize, search!, orderByCollumn, orderByType);
 
         dynamic result = new ExpandoObject();
         result.pageNumber = pageNumber;
@@ -80,9 +77,9 @@ public class PublicationService
         return result;
     }
 
-    public DetailPublicationDto DetailPublication(int id)
+    public async Task<DetailPublicationDto> DetailPublication(int id)
     {
-        var publication = _publicationRepository.GetById(id);
+        var publication = await _publicationRepository.GetById(id);
         if (publication == null)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
 

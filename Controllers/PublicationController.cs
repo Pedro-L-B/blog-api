@@ -33,11 +33,12 @@ public class PublicationController : ControllerBase
     /// <response code="400"> A publicação não foi criada. </response>
     [ProducesResponseType(StatusCodes.Status201Created)]
     [HttpPost]
-    public ActionResult<string> CreatePublication([FromBody] CreatePublicationDto createPublicationDto)
+    public async Task<ActionResult> CreatePublication([FromBody] CreatePublicationDto createPublicationDto)
     {
         try
         {
-            return _publicationService.CreatePublication(createPublicationDto);
+            await _publicationService.CreatePublication(createPublicationDto);
+            return new NoContentResult();
         }
         catch (ErrorException errorException)
         {
@@ -64,12 +65,12 @@ public class PublicationController : ControllerBase
     /// <response code="400"> A publicação não foi alterada. </response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [HttpPut]
-    public ActionResult<string> EditPublication(int id, [FromBody] EditPublicationDto editPublicationDto)
+    public async Task<ActionResult> EditPublication(int id, [FromBody] EditPublicationDto editPublicationDto)
     {
         try
         {
-            if (id != editPublicationDto.PublicationId) return "Id não confere";
-            return _publicationService.EditPublication(id, editPublicationDto);
+            await _publicationService.EditPublication(id, editPublicationDto);
+            return new NoContentResult();
         }
         catch (ErrorException errorException)
         {
@@ -93,11 +94,12 @@ public class PublicationController : ControllerBase
     /// <response code="400"> A publicação não foi apagada. </response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [HttpDelete("{id:int}")]
-    public ActionResult<string> DeletePublication(int id)
+    public async Task<ActionResult> DeletePublication(int id)
     {
         try
         {
-            return _publicationService.DeletePublication(id);
+            await _publicationService.DeletePublication(id);
+            return new NoContentResult();
         }
         catch (ErrorException errorException)
         {
@@ -122,15 +124,15 @@ public class PublicationController : ControllerBase
     ///     }
     /// 
     /// </remarks>
-    /// <param name="pageNumber"> Página atual. </param>
+    /// <param name="pageNumber"> Número da página solicitada. </param>
     /// <param name="pageSize"> Quantidade de publicações por página. </param>
-    /// <param name="search"> Mecanismos de busca por texto. </param>
+    /// <param name="search"> Mecanismo de busca por texto. </param>
     /// <param name="orderByCollumn"> Ordenação de publicações por coluna. </param>
     /// <param name="orderByType"> Ordenação de publicações por tipo. </param>
     /// <response code="200"> Lista de publicações encontrada. </response>
     /// <response code="400"> Nenhuma lista de publicações encontrada. </response>
     [HttpGet]
-    public dynamic ListPublication(
+    public async Task<ActionResult<dynamic>> ListPublication(
         [FromQuery] int pageNumber = 1,
         [FromQuery] int pageSize = 3,
         [FromQuery] string? search = "",
@@ -140,7 +142,7 @@ public class PublicationController : ControllerBase
     {
         try
         {
-            return _publicationService.ListPublication(pageNumber, pageSize, search, orderByCollumn, orderByType);
+            return await _publicationService.ListPublication(pageNumber, pageSize, search, orderByCollumn, orderByType);
         }
         catch (ArgumentOutOfRangeException)
         {
@@ -163,11 +165,12 @@ public class PublicationController : ControllerBase
     /// <response code="200"> Publicação encontrada. </response>
     /// <response code="400"> Nenhuma publicação encontrada. </response>
     [HttpGet("{id:int}")]
-    public ActionResult<DetailPublicationDto> DetailPublication(int id)
+    public async Task<ActionResult<DetailPublicationDto>> DetailPublication(int id)
     {
         try
         {
-            return _publicationService.DetailPublication(id);
+            var result = await _publicationService.DetailPublication(id);
+            return new OkObjectResult(result);
         }
         catch (ErrorException errorException)
         {
