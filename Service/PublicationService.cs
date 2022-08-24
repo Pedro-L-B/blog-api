@@ -33,10 +33,6 @@ public class PublicationService
         if (id != editPublicationDto.PublicationId)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Os Ids não conferem.");
 
-        var titleExceptionCheck = await _publicationRepository.GetByTitle(editPublicationDto.Title!);
-        if (titleExceptionCheck != null)
-            throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma outra publicação com mesmo título.");
-
         var publication = _mapper.Map<Publication>(editPublicationDto);
         _publicationRepository.Update(publication);
 

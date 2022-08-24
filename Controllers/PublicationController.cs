@@ -58,7 +58,8 @@ public class PublicationController : ControllerBase
     ///     {
     ///         "publicationId": 12,
     ///         "title": "Escrevendo o novo título",
-    ///         "message": "Escrevendo um novo texto."
+    ///         "message": "Escrevendo um novo texto.",
+    ///         "commentLimit": 4
     ///     }
     /// 
     /// </remarks>
