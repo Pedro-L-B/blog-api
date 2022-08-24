@@ -59,7 +59,7 @@ public class PublicationService
 
     public dynamic ListPublication(
         int pageNumber = 1,
-        int pageSize = 5,
+        int pageSize = 3,
         string? search = "",
         OrderByPublicationColumnEnum orderByCollumn = OrderByPublicationColumnEnum.PublicationId,
         OrderByTypeEnum orderByType = OrderByTypeEnum.ASC

@@ -4,8 +4,6 @@ using Blog.Api.Repository;
 using Blog.Api.Dto;
 using AutoMapper;
 using Blog.Api.Exceptions;
-using Blog.Api.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Controllers;
 
@@ -20,6 +18,19 @@ public class CommentController : ControllerBase
         _commentService = new CommentService(commentRepository, mapper);
     }
 
+    /// <summary> Endpoint para criar um comentário. </summary>
+    /// <remarks>
+    /// Exemplo RequestBody:
+    /// 
+    ///     {
+    ///         "message": "Texto do comentário",
+    ///         "publicationId": 13
+    ///     }
+    /// 
+    /// </remarks>
+    /// <response code="201"> Comentário criado com sucesso. </response>
+    /// <response code="400"> O comentário não foi criado. </response>
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [HttpPost]
     public ActionResult<string> CreateComment([FromBody] CreateCommentDto comment)
     {
@@ -37,6 +48,17 @@ public class CommentController : ControllerBase
         }
     }
 
+    /// <summary> Endpoint deletar um comentário. </summary>
+    /// <remarks>
+    /// Exemplo RequestBody:
+    /// 
+    ///     12
+    /// 
+    /// </remarks>
+    /// <param name="id"> Id do comentário que deve ser apagado. </param>
+    /// <response code="204"> Comentário apagado com sucesso. </response>
+    /// <response code="400"> O comentário não foi apagado. </response>
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [HttpDelete("{id:int}")]
     public ActionResult<string> DeleteComment(int id)
     {
