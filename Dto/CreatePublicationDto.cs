@@ -5,7 +5,9 @@ namespace Blog.Api.Dto;
 public class CreatePublicationDto
 {
     [Required(ErrorMessage = "É necessário inserir o título da publicação.")]
+    [MaxLength(length: 100, ErrorMessage = "O título deve ter no máximo 100 caracteres.")]
     [MinLength(length: 5, ErrorMessage = "O título deve ter no mínimo 5 caracteres.")]
+
     public string? Title { get; set; }
 
     [Required(ErrorMessage = "É necessário inserir a mensagem da publicação.")]

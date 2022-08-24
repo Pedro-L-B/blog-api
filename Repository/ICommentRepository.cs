@@ -4,8 +4,8 @@ namespace Blog.Api.Repository;
 
 public interface ICommentRepository : IBaseRepository
 {
-    Comment GetById(int id);
-    IEnumerable<Comment> List();
-    Comment GetByMessage(string message);
-    Publication GetPublication (int publicationId);
+    Task<Comment> GetById(int id);
+    Task<IEnumerable<Comment>> List();
+    // Task<Comment> GetByMessage(string message);
+    Task<List<Publication>> GetPublication ();
 }

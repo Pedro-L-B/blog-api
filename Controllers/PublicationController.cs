@@ -5,6 +5,7 @@ using Blog.Api.Repository;
 using Blog.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 using Blog.Api.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Controllers;
 
@@ -64,7 +65,7 @@ public class PublicationController : ControllerBase
     /// <response code="204"> Publicação alterada com sucesso. </response>
     /// <response code="400"> A publicação não foi alterada. </response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [HttpPut]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult> EditPublication(int id, [FromBody] EditPublicationDto editPublicationDto)
     {
         try
@@ -75,6 +76,10 @@ public class PublicationController : ControllerBase
         catch (ErrorException errorException)
         {
             return StatusCode(errorException._statusCode, errorException.Message);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return StatusCode(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
         }
         catch (Exception)
         {

@@ -33,16 +33,16 @@ public class PublicationService
         if (id != editPublicationDto.PublicationId)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Os Ids não conferem.");
 
-        var idExceptionCheck = await _publicationRepository.GetById(editPublicationDto.PublicationId);
-        if (idExceptionCheck == null)
-            throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
-
         var titleExceptionCheck = await _publicationRepository.GetByTitle(editPublicationDto.Title!);
         if (titleExceptionCheck != null)
             throw new ErrorException(StatusCodes.Status400BadRequest, "Já existe uma outra publicação com mesmo título.");
 
         var publication = _mapper.Map<Publication>(editPublicationDto);
         _publicationRepository.Update(publication);
+
+        publication = await _publicationRepository.GetById(editPublicationDto.PublicationId);
+        if (publication == null)
+            throw new ErrorException(StatusCodes.Status400BadRequest, "Não existe publicação com esse Id.");
     }
 
     public async Task DeletePublication(int id)

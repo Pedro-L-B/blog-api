@@ -32,11 +32,12 @@ public class CommentController : ControllerBase
     /// <response code="400"> O comentário não foi criado. </response>
     [ProducesResponseType(StatusCodes.Status201Created)]
     [HttpPost]
-    public ActionResult<string> CreateComment([FromBody] CreateCommentDto comment)
+    public async Task<ActionResult> CreateComment([FromBody] CreateCommentDto comment)
     {
         try
         {
-            return _commentService.CreateComment(comment);
+            await _commentService.CreateComment(comment);
+            return new NoContentResult();
         }
         catch (ErrorException errorException)
         {
@@ -60,11 +61,12 @@ public class CommentController : ControllerBase
     /// <response code="400"> O comentário não foi apagado. </response>
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [HttpDelete("{id:int}")]
-    public ActionResult<string> DeleteComment(int id)
+    public async Task<ActionResult> DeleteComment(int id)
     {
         try
         {
-            return _commentService.DeleteComment(id);
+            await _commentService.DeleteComment(id);
+            return new NoContentResult();
         }
         catch (ErrorException errorException)
         {

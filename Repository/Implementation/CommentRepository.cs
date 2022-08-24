@@ -1,5 +1,6 @@
 using Blog.Api.Context;
 using Blog.Api.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Api.Repository.Implementation;
 
@@ -11,27 +12,29 @@ public class CommentRepository : BaseRepository, ICommentRepository
         _context = context;
     }
 
-    public Comment GetById(int id)
+    public async Task<Comment> GetById(int id)
     {
-        return _context.Comment?.FirstOrDefault(c => c.CommentId == id)!;
+        var result = await _context.Comment?.FirstOrDefaultAsync(c => c.CommentId == id)!;
+        return result!;
     }
 
-    public IEnumerable<Comment> List()
+    public async Task<IEnumerable<Comment>> List()
     {
-        return _context.Comment?.ToList()!;
+        return await _context.Comment?.ToListAsync()!;
     }
 
-    public Comment GetByMessage(string message)
-    {
-        return _context.Comment?
-            .ToList()
-            .FirstOrDefault(c => c.Message == message)!;
-    }
+    // public async Task<Comment> GetByMessage(string message)
+    // {
+    //     var result = await _context.Comment?
+    //         .ToListAsync()
+    //         .FirstOrDefaultAsync(c => c.Message == message)!;
+    //     return result!;
+    // }
 
-    public Publication GetPublication (int publicationId)
+    public async Task<List<Publication>> GetPublication ()
     {
-        return _context.Publication?
-            .ToList()!
-            .FirstOrDefault(p => p.PublicationId == publicationId)!;
+        return await _context.Publication?
+            .Include(p => p.Comments)
+            .ToListAsync()!;
     }
 }
